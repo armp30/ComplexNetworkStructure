@@ -11,6 +11,8 @@ public class GraphLoader {
             Graph graph = new Graph(directed, weighted);
 
             while ((line=reader.readLine()) != null) {
+                if(line.startsWith("#"))
+                    continue;
                 String[] s;
                 try {
                     s = line.split(delimiter);
@@ -24,6 +26,8 @@ public class GraphLoader {
                         graph.addEdge(src,dst);
                 } catch (Exception e) {
                     System.out.println("Exception has occurred");
+                    e.printStackTrace();
+                    return null;
                 }
             }
             reader.close();

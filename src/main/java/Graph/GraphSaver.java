@@ -16,7 +16,7 @@ public class GraphSaver {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(dst))) {
 
             for (Vertex v : graph.getVertices().values()) {
-                writer.write(v.getId() + separator + v.getValue() + "\n");
+                writer.write(v.getId() + separator + v.getWeight() + "\n");
             }
 
             for (Edge e : graph.getEdges()) {

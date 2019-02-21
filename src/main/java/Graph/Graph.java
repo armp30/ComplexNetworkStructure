@@ -42,6 +42,14 @@ public class Graph {
         return (List<Vertex>) edges.stream().filter(x->x.getDst()==v).map(x->x.getSrc()).collect(Collectors.toList());
     }
 
+    public List<Vertex> getNeighbors(Vertex v){
+        List<Vertex> list = new ArrayList<Vertex>(getInNeighbors(v));
+        list.addAll(getInNeighbors(v));
+        return list;
+    }
+
+
+
 
     public void addEdge(Vertex src, Vertex dst){
         edges.add(new Edge(src,dst));
@@ -77,9 +85,9 @@ public class Graph {
 
     public void addVertex(Vertex v){
         if(vertices.containsKey(v.getId())) {
-            double w = v.getValue();
+            double w = v.getWeight();
             v = vertices.get(v.getId());
-            v.setValue(w);
+            v.setWeight(w);
         }
         else {
             vertices.put(v.getId(),v);

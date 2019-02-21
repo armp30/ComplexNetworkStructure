@@ -5,7 +5,8 @@ import java.util.Objects;
 public class Vertex implements Comparable<Vertex> {
     private long id;
     private boolean visited;
-    private double value;
+    private double weight;
+    private long community=-1;
 
     public Vertex(long id) {
         this.id = id;
@@ -13,7 +14,7 @@ public class Vertex implements Comparable<Vertex> {
 
     public Vertex(long id, double value) {
         this.id = id;
-        this.value = value;
+        this.weight = value;
     }
 
     public long getId() {
@@ -32,12 +33,20 @@ public class Vertex implements Comparable<Vertex> {
         this.visited = visited;
     }
 
-    public double getValue() {
-        return value;
+    public double getWeight() {
+        return weight;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public long getCommunity() {
+        return community;
+    }
+
+    public void setCommunity(long community) {
+        this.community = community;
     }
 
     @Override
@@ -58,10 +67,11 @@ public class Vertex implements Comparable<Vertex> {
     public String toString() {
         return "Vertex{" +
                 "id=" + id +
-                ", value=" + value +
+                ", visited=" + visited +
+                ", weight=" + weight +
+                ", community=" + community +
                 '}';
     }
-
 
     @Override
     public int compareTo(Vertex o) {
