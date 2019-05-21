@@ -1,19 +1,17 @@
 package Graph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Graph {
     private Map<Long,Vertex> vertices;
     private List<Edge> edges;
-    private boolean direct;
+    private boolean directed;
     private boolean weighted;
 
-    public Graph(boolean direct, boolean weighted) {
-        this.direct = direct;
+
+    public Graph(boolean directed, boolean weighted) {
+        this.directed = directed;
         this.weighted = weighted;
         vertices = new HashMap<>();
         edges = new ArrayList<>();
@@ -27,25 +25,30 @@ public class Graph {
         return edges;
     }
 
-    public boolean isDirect() {
-        return direct;
+    public boolean isDirected() {
+        return directed;
     }
 
     public boolean isWeighted() {
         return weighted;
     }
 
-    public List<Vertex> getOutNeighbors(Vertex v){
-        return (List<Vertex>) edges.stream().filter(x->x.getSrc()==v).map(x->x.getDst()).collect(Collectors.toList());
+    public Set<Vertex> getOutNeighbors(Vertex v){
+        return edges.stream().filter(x->x.getSrc().equals(v)).map(x->x.getDst()).collect(Collectors.toSet());
     }
-    public List<Vertex> getInNeighbors(Vertex v){
-        return (List<Vertex>) edges.stream().filter(x->x.getDst()==v).map(x->x.getSrc()).collect(Collectors.toList());
+    public Set<Vertex> getInNeighbors(Vertex v){
+        return edges.stream().filter(x->x.getDst().equals(v)).map(x->x.getSrc()).collect(Collectors.toSet());
     }
 
-    public List<Vertex> getNeighbors(Vertex v){
-        List<Vertex> list = new ArrayList<Vertex>(getInNeighbors(v));
-        list.addAll(getInNeighbors(v));
-        return list;
+    public Set<Vertex> getNeighbors(Vertex v){
+       Set<Vertex> neighbours = new HashSet<>();
+       neighbours.addAll(getInNeighbors(v));
+       neighbours.addAll(getOutNeighbors(v));
+        return neighbours;
+    }
+
+    public List<Vertex> getNeighboursList(Vertex v){
+        return new ArrayList<Vertex>(getNeighbors(v));
     }
 
 
@@ -53,12 +56,12 @@ public class Graph {
 
     public void addEdge(Vertex src, Vertex dst){
         edges.add(new Edge(src,dst));
-        if (!direct)
+        if (!directed)
             edges.add(new Edge(dst,src));
     }
     public void addEdge(Vertex src, Vertex dst, double weight){
         edges.add(new Edge(src, dst, weight));
-        if (!direct)
+        if (!directed)
             edges.add(new Edge(dst, src, weight));
     }
 
@@ -94,8 +97,9 @@ public class Graph {
         }
     }
 
-    public List<Vertex> getChildVertices(){
-        return vertices.values().stream().filter(x->this.getOutNeighbors(x).size()==0).collect(Collectors.toList());
+    public Set<Vertex> getChildVertices(){
+        return vertices.values().stream().filter(x->this.getNeighbors(x).size()==1).collect(Collectors.toSet());
+
     }
 
 }
